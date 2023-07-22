@@ -32,6 +32,7 @@ app.route("/login").post((req,res)=>{
             }
             else{
                 res.json({status:"success",errorCode:"0",userType:user.userType})
+                Cusername=user.username
             }
         }
         
