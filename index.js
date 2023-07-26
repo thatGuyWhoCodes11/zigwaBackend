@@ -2,9 +2,10 @@ require("dotenv").config()
 const express=require("express")
 const myDb=require("./mongo")
 const app=express()
+const cors=require("cors")
 
 let Cusername
-app.use(express.urlencoded({extended:true}),express.json())
+app.use(express.urlencoded({extended:true}),express.json(),cors())
 app.route("/").get((req,res)=>{
     res.send("zigwa starters")
 })
