@@ -38,6 +38,6 @@ app.route("/login").post((req,res)=>{
         
     })
 })
-app.listen(9000)
+app.listen(process.env.PORT)
 
 //everything done but remains dateOfBirth userType balance to be procesed in register route
