@@ -1,4 +1,4 @@
-list of error codes: 
+list of error codes:- \n 
 0: success
 1: data already exists
 2: not found
