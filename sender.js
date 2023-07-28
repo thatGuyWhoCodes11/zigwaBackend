@@ -1,10 +1,12 @@
-(async ()=>{
-    let params={
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({username:"patchy",password:"piratesarethebest"})
-    }
-    let data=await fetch("http://localhost:9000/login",params)
-    data=await data.json()
-    console.log(data)
-})()
+sendCreds = async () => {
+  let params = {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ username: 'ahmad', password: 'xxAxx' }),
+  };
+  let data = await fetch('https://zigwa.cleverapps.io/login', params);
+  return data =await data.json();
+};
+let data=sendCreds().then((data)=>{console.log(data)})
