@@ -3,6 +3,11 @@ const express = require("express")
 const myDb = require("./mongo")
 const app = express()
 const cors = require("cors")
+const multer = require("multer")
+const fs = require("fs")
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
 let Cusername
 app.use(express.urlencoded({ extended: true }), express.json(), cors())
@@ -19,6 +24,8 @@ app.route("/register").post(async (req, res, next) => {
             await myDb.users.insertMany({ username: username, password: password, dateOfBirth: dateOfBirth, userType: userType }).then((stat => res.json({ status: "success", errorCode: "0" })))
         }
     })
+}).get((req, res) => {
+    res.sendFile(__dirname + '/test.html')
 })
 app.route("/login").post((req, res) => {
     const { username, password } = req.body
@@ -37,18 +44,32 @@ app.route("/login").post((req, res) => {
         }
 
     })
+}).get((req, res) => {
+    res.sendFile(__dirname + '/test2.html')
 })
-app.route("/Locations").post((req, res) => {
-    const { location, username } = req.body
-    myDb.users.findOne({ username: username }, (doc) => {
-        if (!doc) {
-            res.json({ errorCode: 2, status: "not found" })
-        } else {
-            myDb.locations.insertMany({ location: location }, (doc) => {
-                doc._id = username
-                res.json({ errorCode: 0, status: "success" })
-            })
-        }
-    })
+app.post("/location", upload.single('image'), (req, res) => {
+    if (!Cusername) {
+        res.json({ errorCode: "4", status: "user not registered" })
+    } else {
+        myDb.images.insertMany({ username: Cusername, image_name: Date.now(), buffer: req.body.image,location:req.body.location }).then((doc) => {
+            if (!doc) {
+                res.json({ status: "internal error" })
+            } else {
+                res.json({ errorCode: 0, status: 'success' })
+            }
+        }).catch((err) => {
+            res.json({ status: err })
+        })
+    }
+})
+app.get("/location", (req, res) => {
+    const { location } = req.query
+        myDb.images.find({ location:location }).then((doc) => {
+            if (!doc) {
+                res.json({ error: 2, status: "not found" })
+            } else {
+                res.json({errorCode:0,status:"success",doc})
+            }
+        })
 })
 app.listen(process.env.PORT)

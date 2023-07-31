@@ -8,9 +8,13 @@
 </head>
 <body>
     <form action="/register" method="post">
-        <input type="text" name="username" id="1">
-        <input type="text" name="pass" id="2">
-        <button type="submit"></button>
+        <input placeholder="username" type="text" name="username" id="1">
+        <input type="text" placeholder="password" name="password" id="2">
+        <input type="radio" name="userType" value="citizen">citizen
+        <input type="radio" name="userType" value="collector">collector
+        <input type="radio" name="userType" value="scrap-dealer">scrap-dealer
+        <input type="date" name="dateOfBirth">
+        <button type="submit">submit</button>
     </form>
 </body>
 </html>

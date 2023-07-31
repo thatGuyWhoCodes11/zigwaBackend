@@ -1,16 +1,19 @@
 require("dotenv").config()
-const mongo=require("mongoose")
+const mongo = require("mongoose")
 mongo.connect(process.env.mongoUri)
-const usersSchema=new mongo.Schema({
-    username:{required:true,type:String,unique:true},
-    password:{required:true,type:String},
-    balance:{type:String},
-    dateOfBirth:{required:true,type:String},
-    userType:{required:true,type:String}
+const usersSchema = new mongo.Schema({
+    username: { required: true, type: String, unique: true },
+    password: { required: true, type: String },
+    balance: { type: String },
+    dateOfBirth: { required: true, type: String },
+    userType: { required: true, type: String }
 })
-const locationsSchema=new mongo.Schema({
-    location:String,
+const imagesSchema = new mongo.Schema({
+    username: String,
+    image_name: String,
+    location: String,
+    buffer: String
 })
-const users=new mongo.model("zigwa users",usersSchema)
-const locations=new mongo.model("locations",locationsSchema)
-module.exports={users,locations}
+const images = new mongo.model("images", imagesSchema)
+const users = new mongo.model("zigwa users", usersSchema)
+module.exports = { images, users }
