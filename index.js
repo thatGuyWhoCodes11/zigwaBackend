@@ -15,13 +15,13 @@ app.route("/").get((req, res) => {
     res.send("zigwa starters")
 })
 app.route("/register").post(async (req, res, next) => {
-    const { username, password, dateOfBirth, userType } = req.body
+    const { username, password, dateOfBirth, userType,phoneNumber } = req.body
     await myDb.users.findOne({ username: username }).then(async user => {
         if (user) {
             res.json({ status: "data already exists", errorCode: "1" })
         }
         else {
-            await myDb.users.insertMany({ username: username, password: password, dateOfBirth: dateOfBirth, userType: userType }).then((stat => res.json({ status: "success", errorCode: "0" })))
+            await myDb.users.insertMany({ username: username, password: password, dateOfBirth: dateOfBirth, userType: userType, phoneNumber:phoneNumber }).then((stat => res.json({ status: "success", errorCode: "0" })))
         }
     })
 }).get((req, res) => {
@@ -51,7 +51,7 @@ app.post("/location", upload.single('image'), (req, res) => {
     if (!Cusername) {
         res.json({ errorCode: "4", status: "user not registered" })
     } else {
-        myDb.images.insertMany({ username: Cusername, image_name: Date.now(), buffer: req.body.image,location:req.body.location }).then((doc) => {
+        myDb.images.insertMany({ username: Cusername, image_name: Date.now(), buffer: req.body.image, location: req.body.location }).then((doc) => {
             if (!doc) {
                 res.json({ status: "internal error" })
             } else {
@@ -64,12 +64,12 @@ app.post("/location", upload.single('image'), (req, res) => {
 })
 app.get("/location", (req, res) => {
     const { location } = req.query
-        myDb.images.find({ location:location }).then((doc) => {
-            if (!doc) {
-                res.json({ error: 2, status: "not found" })
-            } else {
-                res.json({errorCode:0,status:"success",doc})
-            }
-        })
+    myDb.images.find({ location: location }).then((doc) => {
+        if (!doc) {
+            res.json({ error: 2, status: "not found" })
+        } else {
+            res.json({ errorCode: 0, status: "success", doc })
+        }
+    })
 })
 app.listen(process.env.PORT)

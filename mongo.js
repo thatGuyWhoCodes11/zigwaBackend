@@ -6,7 +6,8 @@ const usersSchema = new mongo.Schema({
     password: { required: true, type: String },
     balance: { type: String },
     dateOfBirth: { required: true, type: String },
-    userType: { required: true, type: String }
+    userType: { required: true, type: String },
+    phoneNumber: { required: true, type: String }
 })
 const imagesSchema = new mongo.Schema({
     username: String,
