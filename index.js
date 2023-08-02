@@ -10,12 +10,13 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
 let Cusername
-app.use(express.urlencoded({ extended: true }), express.json(), cors())
+app.use(express.urlencoded({ extended: false }), express.json(), cors())
 app.route("/").get((req, res) => {
     res.send("zigwa starters")
 })
-app.route("/register").post(async (req, res, next) => {
-    const { name,username, password, dateOfBirth, userType,phoneNumber } = req.body
+app.route("/register").post(upload.single('image'),async (req, res) => {
+    const { name,username, password, dateOfBirth, userType, phoneNumber } = req.body
+    console.log(req.body)
     await myDb.users.findOne({ username: username }).then(async user => {
         if (user) {
             res.json({ status: "data already exists", errorCode: "1" })
