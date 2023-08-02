@@ -2,6 +2,7 @@ require("dotenv").config()
 const mongo = require("mongoose")
 mongo.connect(process.env.mongoUri)
 const usersSchema = new mongo.Schema({
+    name:String,
     username: { required: true, type: String, unique: true },
     password: { required: true, type: String },
     balance: { type: String },

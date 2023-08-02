@@ -6,5 +6,5 @@ list of error codes:- <br>
 4: user not registered<br><br>
 routes:- <br>
 post login: log the user into the system, enteries= username,passsword <br>
-post register: register the user into system, enteries= username, password, dateOfBirth, userType, phoneNumber <br>
+post register: register the user into system, enteries= name,username, password, dateOfBirth, userType, phoneNumber <br>
 post location: will take image and address of user, enteries= image, location
