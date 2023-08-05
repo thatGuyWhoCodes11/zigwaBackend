@@ -41,7 +41,7 @@ app.route("/login").post(upload.single('image'),(req, res) => {
                 res.json({ status: "passwords don't match", errorCode: "3" })
             }
             else {
-                res.json({ status: "success", errorCode: "0", userType: user.userType })
+                res.json({ status: "success", errorCode: "0", userData: user })
                 Cusername = user.username
             }
         }
