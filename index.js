@@ -6,6 +6,7 @@ const cors = require("cors")
 const multer = require("multer")
 const fs = require("fs")
 
+//setting up multer
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: false }), express.json(), cors())
 app.route("/").get((req, res) => {
     res.send("zigwa starters")
 })
+//route to handle user register
 app.route("/register").post(upload.single('image'),async (req, res) => {
     const { name,username, password, dateOfBirth, userType, phoneNumber } = req.body
     console.log(req.body)
@@ -28,7 +30,7 @@ app.route("/register").post(upload.single('image'),async (req, res) => {
 }).get((req, res) => {
     res.sendFile(__dirname + '/test.html')
 })
-app.route("/login").post((req, res) => {
+app.route("/login").post(upload.single('image'),(req, res) => {
     const { username, password } = req.body
     myDb.users.findOne({ username: username }).then(user => {
         if (!user) {
