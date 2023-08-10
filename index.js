@@ -66,8 +66,7 @@ app.post("/location", upload.single('image'), (req, res) => {
     }
 })
 app.get("/location", (req, res) => {
-    const { location } = req.query
-    myDb.images.find({ location: location }).then((doc) => {
+    myDb.images.find({}).then((doc) => {
         if (!doc) {
             res.json({ error: 2, status: "not found" })
         } else {
