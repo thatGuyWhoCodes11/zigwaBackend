@@ -16,6 +16,14 @@ const imagesSchema = new mongo.Schema({
     location: String,
     buffer: String
 })
+const transactionSchema=new mongo.Schema({
+    status:String,
+    collectorUsername:String,
+    citizenUsername:String,
+    collectorLocation:mongo.Schema.Types.Mixed,
+    citizenLocation:mongo.Schema.Types.Mixed,
+})
+const transactions=new mongo.model('transactions',transactionSchema)
 const images = new mongo.model("images", imagesSchema)
 const users = new mongo.model("zigwa users", usersSchema)
-module.exports = { images, users }
+module.exports = { images, users,transactions }

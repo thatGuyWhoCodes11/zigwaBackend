@@ -16,21 +16,21 @@ app.route("/").get((req, res) => {
     res.send("zigwa starters")
 })
 //route to handle user register
-app.route("/register").post(upload.single('image'),async (req, res) => {
-    const { name,username, password, dateOfBirth, userType, phoneNumber } = req.body
+app.route("/register").post(upload.single('image'), async (req, res) => {
+    const { name, username, password, dateOfBirth, userType, phoneNumber } = req.body
     console.log(req.body)
     await myDb.users.findOne({ username: username }).then(async user => {
         if (user) {
             res.json({ status: "data already exists", errorCode: "1" })
         }
         else {
-            await myDb.users.insertMany({ name:name,username: username, password: password, dateOfBirth: dateOfBirth, userType: userType, phoneNumber:phoneNumber }).then((stat => res.json({ status: "success", errorCode: "0" }))).catch((err)=>{res.json({err})})
+            await myDb.users.insertMany({ name: name, username: username, password: password, dateOfBirth: dateOfBirth, userType: userType, phoneNumber: phoneNumber }).then((stat => res.json({ status: "success", errorCode: "0" }))).catch((err) => { res.json({ err }) })
         }
-    }).catch((err)=>{res.json({err})})
+    }).catch((err) => { res.json({ err }) })
 }).get((req, res) => {
     res.sendFile(__dirname + '/test.html')
 })
-app.route("/login").post(upload.single('image'),(req, res) => {
+app.route("/login").post(upload.single('image'), (req, res) => {
     const { username, password } = req.body
     myDb.users.findOne({ username: username }).then(user => {
         if (!user) {
@@ -46,7 +46,7 @@ app.route("/login").post(upload.single('image'),(req, res) => {
             }
         }
 
-    }).catch((err)=>{res.json({err})})
+    }).catch((err) => { res.json({ err }) })
 }).get((req, res) => {
     res.sendFile(__dirname + '/test2.html')
 })
@@ -72,6 +72,23 @@ app.get("/location", (req, res) => {
         } else {
             res.json({ errorCode: 0, status: "success", doc })
         }
-    }).catch((err)=>{res.json({err})})
+    }).catch((err) => { res.json({ err }) })
+})
+app.route('/transactions').post(upload.single('image'), (req, res) => {
+    const { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation } = req.body
+    myDb.transactions.insertMany({ status: status, collectorLocation: collectorLocation, citizenUsername: citizenUsername, collectorUsername: collectorUsername, citizenLocation: citizenLocation }).then((doc) => {
+        if (doc) {
+            res.json({ errorCode: 0, status: 'success', userData: doc })
+        } else
+            res.json({})
+    }).catch((err)=>{res.json({error:err})})
+}).get((req, res) => {
+    const { citizenUsername } = req.query
+    myDb.transactions.find({ citizenUsername: citizenUsername }).then((doc) => {
+        if (doc)
+            res.json({ errorCode: 0, status: 'success', userData: doc })
+        else
+            res.json({ status: 'error' })
+    }).catch((err) => { res.json({ error: err }) })
 })
 app.listen(process.env.PORT)
