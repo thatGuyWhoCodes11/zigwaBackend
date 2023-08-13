@@ -76,6 +76,8 @@ app.get("/location", (req, res) => {
 })
 app.route('/transactions').post(upload.single('image'), (req, res) => {
     const { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation } = req.body
+    collectorLocation=JSON.parse(collectorLocation)
+    citizenLocation=JSON.parse(citizenLocation)
     myDb.transactions.insertMany({ status: status, collectorLocation: collectorLocation, citizenUsername: citizenUsername, collectorUsername: collectorUsername, citizenLocation: citizenLocation }).then((doc) => {
         if (doc) {
             res.json({ errorCode: 0, status: 'success', userData: doc })
