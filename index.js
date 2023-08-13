@@ -50,7 +50,7 @@ app.route("/login").post(upload.single('image'), (req, res) => {
 }).get((req, res) => {
     res.sendFile(__dirname + '/test2.html')
 })
-app.post("/location", upload.single('image'), (req, res) => {
+app.route("/location").post(upload.single('image'), (req, res) => {
     if (!Cusername) {
         res.json({ errorCode: "4", status: "user not registered" })
     } else {
@@ -75,7 +75,7 @@ app.get("/location", (req, res) => {
     }).catch((err) => { res.json({ err }) })
 })
 app.route('/transactions').post(upload.single('image'), (req, res) => {
-    const { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation } = req.body
+    let { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation } = req.body
     collectorLocation=JSON.parse(collectorLocation)
     citizenLocation=JSON.parse(citizenLocation)
     myDb.transactions.insertMany({ status: status, collectorLocation: collectorLocation, citizenUsername: citizenUsername, collectorUsername: collectorUsername, citizenLocation: citizenLocation }).then((doc) => {

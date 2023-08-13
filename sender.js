@@ -1,6 +1,12 @@
-const axios=require('axios')
-const formData=new FormData
-formData.append('username','123')
-fetch('https://zigwa.cleverapps.io/login', { method:"post",headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: formData }).then((res) => {
-            res.json().then((data)=>console.log(data))
-        }).catch((err)=> console.log(err) )
+const axios = require("axios");
+
+(async () => {
+    const formData = new FormData()
+    formData.append('status', 'accepted - onGoing')
+    formData.append('collectorLocation', `{"latitude":${123},"longitude":${124}}`)
+    formData.append('citizenLocation', `{"latitude":${123},"longitude":${123}}`)
+    formData.append('citizenUsername', 'mohmammad')
+    formData.append('collectorUsername', 'ahmed')
+    axios.post('http://localhost:9000/transactions', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+})()
+
