@@ -54,7 +54,7 @@ app.route("/location").post(upload.single('image'), (req, res) => {
     if (!Cusername) {
         res.json({ errorCode: "4", status: "user not registered" })
     } else {
-        myDb.images.insertMany({ username: Cusername, image_name: Date.now(), buffer: req.body.image, location: req.body.location }).then((doc) => {
+        myDb.images.insertMany({ username: Cusername, image_name: Date.now(), buffer: req.body.image, location: JSON.parse(req.body.location) }).then((doc) => {
             if (!doc) {
                 res.json({ status: "internal error" })
             } else {
