@@ -13,7 +13,7 @@ const usersSchema = new mongo.Schema({
 const imagesSchema = new mongo.Schema({
     username: String,
     image_name: String,
-    location: String,
+    location: mongo.Schema.Types.Mixed,
     buffer: String
 })
 const transactionSchema=new mongo.Schema({

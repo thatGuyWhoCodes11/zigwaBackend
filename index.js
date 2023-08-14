@@ -64,8 +64,7 @@ app.route("/location").post(upload.single('image'), (req, res) => {
             res.json({ status: err })
         })
     }
-})
-app.get("/location", (req, res) => {
+}).get("/location", (req, res) => {
     myDb.images.find({}).then((doc) => {
         if (!doc) {
             res.json({ error: 2, status: "not found" })
@@ -73,17 +72,20 @@ app.get("/location", (req, res) => {
             res.json({ errorCode: 0, status: "success", doc })
         }
     }).catch((err) => { res.json({ err }) })
+}).delete((req,res)=>{
+    const {latitude}=req.query
+    myDb.images.deleteMany({'location.latitude':latitude}).then(()=>res.json({errorCode:0,status:'success'})).catch((err)=>res.json({error:err}))
 })
 app.route('/transactions').post(upload.single('image'), (req, res) => {
     let { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation } = req.body
-    collectorLocation=JSON.parse(collectorLocation)
-    citizenLocation=JSON.parse(citizenLocation)
+    collectorLocation = JSON.parse(collectorLocation)
+    citizenLocation = JSON.parse(citizenLocation)
     myDb.transactions.insertMany({ status: status, collectorLocation: collectorLocation, citizenUsername: citizenUsername, collectorUsername: collectorUsername, citizenLocation: citizenLocation }).then((doc) => {
         if (doc) {
             res.json({ errorCode: 0, status: 'success', userData: doc })
         } else
             res.json({})
-    }).catch((err)=>{res.json({error:err})})
+    }).catch((err) => { res.json({ error: err }) })
 }).get((req, res) => {
     const { citizenUsername } = req.query
     myDb.transactions.find({ citizenUsername: citizenUsername }).then((doc) => {
