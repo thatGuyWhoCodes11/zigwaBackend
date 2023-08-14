@@ -64,7 +64,7 @@ app.route("/location").post(upload.single('image'), (req, res) => {
             res.json({ status: err })
         })
     }
-}).get("/location", (req, res) => {
+}).get((req, res) => {
     myDb.images.find({}).then((doc) => {
         if (!doc) {
             res.json({ error: 2, status: "not found" })
