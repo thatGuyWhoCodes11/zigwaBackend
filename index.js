@@ -88,7 +88,8 @@ app.route('/transactions').post(upload.single('image'), (req, res) => {
     }).catch((err) => { res.json({ error: err }) })
 }).get((req, res) => {
     const { citizenUsername } = req.query
-    myDb.transactions.find({ citizenUsername: citizenUsername }).then((doc) => {
+    let searchParams= citizenUsername ? { citizenUsername: citizenUsername }:{}
+    myDb.transactions.find(searchParams).then((doc) => {
         if (doc)
             res.json({ errorCode: 0, status: 'success', userData: doc })
         else
