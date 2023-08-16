@@ -23,7 +23,12 @@ const transactionSchema=new mongo.Schema({
     collectorLocation:mongo.Schema.Types.Mixed,
     citizenLocation:mongo.Schema.Types.Mixed,
 })
+const ignoreListSchema=new mongo.Schema({
+    collectorUsername:String,
+    imageName:String
+})
 const transactions=new mongo.model('transactions',transactionSchema)
 const images = new mongo.model("images", imagesSchema)
 const users = new mongo.model("zigwa users", usersSchema)
-module.exports = { images, users,transactions }
+const ignores=new mongo.model('ignoreList',ignoreListSchema)
+module.exports = { images, users,transactions,ignores}

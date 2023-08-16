@@ -72,9 +72,9 @@ app.route("/location").post(upload.single('image'), (req, res) => {
             res.json({ errorCode: 0, status: "success", doc })
         }
     }).catch((err) => { res.json({ err }) })
-}).delete((req,res)=>{
-    const {latitude}=req.query
-    myDb.images.deleteMany({'location.latitude':latitude}).then(()=>res.json({errorCode:0,status:'success'})).catch((err)=>res.json({error:err}))
+}).delete((req, res) => {
+    const { latitude } = req.query
+    myDb.images.deleteMany({ 'location.latitude': latitude }).then(() => res.json({ errorCode: 0, status: 'success' })).catch((err) => res.json({ error: err }))
 })
 app.route('/transactions').post(upload.single('image'), (req, res) => {
     let { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation } = req.body
@@ -88,12 +88,36 @@ app.route('/transactions').post(upload.single('image'), (req, res) => {
     }).catch((err) => { res.json({ error: err }) })
 }).get((req, res) => {
     const { citizenUsername } = req.query
-    let searchParams= citizenUsername ? { citizenUsername: citizenUsername }:{}
+    let searchParams = citizenUsername ? { citizenUsername: citizenUsername } : {}
     myDb.transactions.find(searchParams).then((doc) => {
         if (doc)
             res.json({ errorCode: 0, status: 'success', userData: doc })
         else
             res.json({ status: 'error' })
     }).catch((err) => { res.json({ error: err }) })
+})
+app.route('/ignore').post(upload.single('image'), (req, res) => {
+    const { imageName, collectorUsername } = req.body;
+    myDb.ignores.insertMany({ imageName: imageName, collectorUsername: collectorUsername }).then(() => {
+        if (doc) {
+            res.json({ errorCode: 0, status: 'success' })
+        } else {
+            res.json({ error: 'something went wrong!' })
+        }
+    }
+    ).catch((err) => {
+        res.json({ error: err })
+    })
+}).get((req, res) => {
+    const {imageName,collectorUsername} = req.query
+    myDb.ignores.findOne({imageName:imageName,collectorUsername:collectorUsername}).then((doc)=>{
+        if(doc){
+            res.json({errorCode:0,status:'image does exist!'})
+        }else{
+            res.json({status:'image doesn\'t exist!'})
+        }
+    }).catch((err)=>{
+        res.json({error:err})
+    })
 })
 app.listen(process.env.PORT)
