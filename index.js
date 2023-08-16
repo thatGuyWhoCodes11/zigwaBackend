@@ -98,7 +98,7 @@ app.route('/transactions').post(upload.single('image'), (req, res) => {
 })
 app.route('/ignore').post(upload.single('image'), (req, res) => {
     const { imageName, collectorUsername } = req.body;
-    myDb.ignores.insertMany({ imageName: imageName, collectorUsername: collectorUsername }).then(() => {
+    myDb.ignores.insertMany({ imageName: imageName, collectorUsername: collectorUsername }).then((doc) => {
         if (doc) {
             res.json({ errorCode: 0, status: 'success' })
         } else {
@@ -106,18 +106,20 @@ app.route('/ignore').post(upload.single('image'), (req, res) => {
         }
     }
     ).catch((err) => {
+        console.log(err)
         res.json({ error: err })
     })
 }).get((req, res) => {
-    const {imageName,collectorUsername} = req.query
-    myDb.ignores.findOne({imageName:imageName,collectorUsername:collectorUsername}).then((doc)=>{
-        if(doc){
-            res.json({errorCode:0,status:'image does exist!'})
-        }else{
-            res.json({status:'image doesn\'t exist!'})
+    const { imageName, collectorUsername } = req.query
+    myDb.ignores.findOne({ imageName: imageName, collectorUsername: collectorUsername }).then((doc) => {
+        if (doc) {
+            res.json({ errorCode: 0, status: 'image does exist!' })
+        } else {
+            res.json({ status: 'image doesn\'t exist!' })
         }
-    }).catch((err)=>{
-        res.json({error:err})
+    }).catch((err) => {
+        console.log(err)
+        res.json({ error: err })
     })
 })
 app.listen(process.env.PORT)
