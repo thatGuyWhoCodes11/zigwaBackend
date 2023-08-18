@@ -96,7 +96,7 @@ app.route('/transactions').post(upload.single('image'), (req, res) => {
             res.json({ status: 'error' })
     }).catch((err) => { res.json({ error: err }) })
 }).put((req, res) => {
-    const { updatedStatus, id } = req.body
+    const { updatedStatus, id } = req.query
     myDb.transactions.findByIdAndUpdate(id, { $set: { status: updatedStatus } }).then(() => {
         res.json({ errorCode: 0, status: 'success!' })
     }).catch((err) => {
