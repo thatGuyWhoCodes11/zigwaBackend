@@ -95,6 +95,14 @@ app.route('/transactions').post(upload.single('image'), (req, res) => {
         else
             res.json({ status: 'error' })
     }).catch((err) => { res.json({ error: err }) })
+}).put((req, res) => {
+    const { updatedStatus, id } = req.body
+    myDb.transactions.findByIdAndUpdate(id, { $set: { status: updatedStatus } }).then(() => {
+        res.json({ errorCode: 0, status: 'success!' })
+    }).catch((err) => {
+        console.log(err)
+        res.json({ error: 'something went wrong' })
+    })
 })
 app.route('/ignore').post(upload.single('image'), (req, res) => {
     const { imageName, collectorUsername } = req.body;
@@ -112,6 +120,7 @@ app.route('/ignore').post(upload.single('image'), (req, res) => {
 }).get((req, res) => {
     const { imageName, collectorUsername } = req.query
     myDb.ignores.findOne({ imageName: imageName, collectorUsername: collectorUsername }).then((doc) => {
+        console.log(doc)
         if (doc) {
             res.json({ errorCode: 0, status: 'image does exist!' })
         } else {
