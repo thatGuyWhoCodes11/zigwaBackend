@@ -65,7 +65,9 @@ app.route("/location").post(upload.single('image'), (req, res) => {
         })
     }
 }).get((req, res) => {
-    myDb.images.find({}).then((doc) => {
+    const {image_name}=req.query
+    const query=image_name ? {image_name:image_name} : {}
+    myDb.images.find(query).then((doc) => {
         if (!doc) {
             res.json({ error: 2, status: "not found" })
         } else {
@@ -77,10 +79,10 @@ app.route("/location").post(upload.single('image'), (req, res) => {
     myDb.images.deleteMany({ 'location.latitude': latitude }).then(() => res.json({ errorCode: 0, status: 'success' })).catch((err) => res.json({ error: err }))
 })
 app.route('/transactions').post(upload.single('image'), (req, res) => {
-    let { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation } = req.body
+    let { status, collectorUsername, citizenUsername, collectorLocation, citizenLocation,image_name } = req.body
     collectorLocation = JSON.parse(collectorLocation)
     citizenLocation = JSON.parse(citizenLocation)
-    myDb.transactions.insertMany({ status: status, collectorLocation: collectorLocation, citizenUsername: citizenUsername, collectorUsername: collectorUsername, citizenLocation: citizenLocation }).then((doc) => {
+    myDb.transactions.insertMany({ image_name:image_name,status: status, collectorLocation: collectorLocation, citizenUsername: citizenUsername, collectorUsername: collectorUsername, citizenLocation: citizenLocation }).then((doc) => {
         if (doc) {
             res.json({ errorCode: 0, status: 'success', userData: doc })
         } else
@@ -130,5 +132,21 @@ app.route('/ignore').post(upload.single('image'), (req, res) => {
         console.log(err)
         res.json({ error: err })
     })
+})
+app.route('/notifications').post((req,res)=>{
+    const {citizenUsername,collectorUsername,image_name,descripition}=req.query
+    myDb.scrapDealerNotif.insertMany({citizenUsername,collectorUsername,image_name,descripition}).then((doc)=>{
+        if(doc){
+            res.json({errorCode:0,status:'success!',userData:doc})
+        }else
+            res.json({status:'no such thing got stored'})
+    }).catch((err)=>{console.log(err);res.json({err:'an error happned! check clever cloud console'})})
+}).get((req,res)=>{
+    myDb.scrapDealerNotif.find({}).then((doc)=>{
+        if(doc)
+            res.json({errorCode:0,status:'success!',userData:doc})
+        else
+            res.json({status:'empty, :skull:'})
+    }).catch((err)=>{res.json('something went wrong!');console.log(err)})
 })
 app.listen(process.env.PORT)

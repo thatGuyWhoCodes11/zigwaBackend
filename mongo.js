@@ -8,7 +8,8 @@ const usersSchema = new mongo.Schema({
     balance: { type: String },
     dateOfBirth: { required: true, type: String },
     userType: { required: true, type: String },
-    phoneNumber: { required: true, type: String }
+    phoneNumber: { required: true, type: String },
+    credits:Number
 })
 const imagesSchema = new mongo.Schema({
     username: String,
@@ -17,6 +18,7 @@ const imagesSchema = new mongo.Schema({
     buffer: String
 })
 const transactionSchema=new mongo.Schema({
+    image_name:String,
     status:String,
     collectorUsername:String,
     citizenUsername:String,
@@ -27,8 +29,15 @@ const ignoreListSchema=new mongo.Schema({
     collectorUsername:String,
     imageName:String
 })
+const scrapDealerNotifSchema=new mongo.Schema({
+    citizenUsername:String,
+    collectorUsername:String,
+    image_name:String,
+    description:String
+})
+const scrapDealerNotif=new mongo.model('scrapDealerNotif',scrapDealerNotifSchema)
 const transactions=new mongo.model('transactions',transactionSchema)
 const images = new mongo.model("images", imagesSchema)
 const users = new mongo.model("zigwa users", usersSchema)
 const ignores=new mongo.model('ignoreList',ignoreListSchema)
-module.exports = { images, users,transactions,ignores}
+module.exports = { images, users,transactions,ignores,scrapDealerNotif}
