@@ -135,7 +135,7 @@ app.route('/ignore').post(upload.single('image'), (req, res) => {
 })
 app.route('/notifications').post((req,res)=>{
     const {citizenUsername,collectorUsername,image_name,descripition}=req.query
-    myDb.scrapDealerNotif.insertMany({citizenUsername,collectorUsername,image_name,descripition}).then((doc)=>{
+    myDb.scrapDealerNotif.insertMany({citizenUsername:citizenUsername,collectorUsername:collectorUsername,image_name:image_name,descripition:descripition}).then((doc)=>{
         if(doc){
             res.json({errorCode:0,status:'success!',userData:doc})
         }else
