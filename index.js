@@ -150,7 +150,7 @@ app.route('/notifications').post(upload.single('image'), (req, res) => {
             res.json({ status: 'empty, :skull:' })
     }).catch((err) => { res.json('something went wrong!'); console.log(err) })
 })
-app.route('/collectorNotif').post((req, res) => {
+app.route('/collectorNotif').post(upload.single('image'),(req, res) => {
     const { scrapUsername, address } = req.body
     myDb.collectorNotifications.insertMany({ scrapUsername: scrapUsername, address: address }).then((doc) => {
         if (doc)
