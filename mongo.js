@@ -33,6 +33,7 @@ const scrapDealerNotifSchema=new mongo.Schema({
     citizenUsername:String,
     collectorUsername:String,
     image_name:String,
+    accepted:String,
     description:String
 })
 const collectorNotificationsSchema=new mongo.Schema({
