@@ -35,9 +35,14 @@ const scrapDealerNotifSchema=new mongo.Schema({
     image_name:String,
     description:String
 })
+const collectorNotificationsSchema=new mongo.Schema({
+    scrapUsername:String,
+    address:String
+})
+const collectorNotifications=new mongo.model('collectorNotif',collectorNotificationsSchema)
 const scrapDealerNotif=new mongo.model('scrapDealerNotif',scrapDealerNotifSchema)
 const transactions=new mongo.model('transactions',transactionSchema)
 const images = new mongo.model("images", imagesSchema)
 const users = new mongo.model("zigwa users", usersSchema)
 const ignores=new mongo.model('ignoreList',ignoreListSchema)
-module.exports = { images, users,transactions,ignores,scrapDealerNotif}
+module.exports = { images, users,transactions,ignores,scrapDealerNotif,collectorNotifications}
