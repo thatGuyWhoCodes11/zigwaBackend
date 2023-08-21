@@ -67,6 +67,7 @@ app.route("/location").post(upload.single('image'), (req, res) => {
 }).get((req, res) => {
     const {image_name}=req.query
     const query=image_name ? {image_name:image_name} : {}
+    console.log(query)
     myDb.images.find(query).then((doc) => {
         if (!doc) {
             res.json({ error: 2, status: "not found" })
@@ -134,7 +135,7 @@ app.route('/ignore').post(upload.single('image'), (req, res) => {
     })
 })
 app.route('/notifications').post((req,res)=>{
-    const {citizenUsername,collectorUsername,image_name,descripition}=req.query
+    const {citizenUsername,collectorUsername,image_name,descripition}=req.body
     myDb.scrapDealerNotif.insertMany({citizenUsername:citizenUsername,collectorUsername:collectorUsername,image_name:image_name,descripition:descripition}).then((doc)=>{
         if(doc){
             res.json({errorCode:0,status:'success!',userData:doc})
