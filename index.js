@@ -149,13 +149,20 @@ app.route('/notifications').post(upload.single('image'), (req, res) => {
         else
             res.json({ status: 'empty, :skull:' })
     }).catch((err) => { res.json('something went wrong!'); console.log(err) })
-}).put((req,res=>{
-    const {_id}=req.query
-    myDb.scrapDealerNotif.updateOne({_id:_id},{$set:{accepted:'yes'}}).then((req,res)=>{
-        res.json({errorCode:0})
-    }).catch((err)=>{console.log(err);res.json({error:'an error happened!'})})
+}).put((req, res => {
+    const { _id, completed } = req.query
+    if (completed) {
+        myDb.scrapDealerNotif.updateOne({ _id: _id }, { $set: { completed: 'yes' } }).then((req, res) => {
+            res.json({ errorCode: 0 })
+        }).catch((err) => { console.log(err); res.json({ error: 'an error happened!' }) })
+    }
+    else {
+        myDb.scrapDealerNotif.updateOne({ _id: _id }, { $set: { accepted: 'yes' } }).then((req, res) => {
+            res.json({ errorCode: 0 })
+        }).catch((err) => { console.log(err); res.json({ error: 'an error happened!' }) })
+    }
 }))
-app.route('/collectorNotif').post(upload.single('image'),(req, res) => {
+app.route('/collectorNotif').post(upload.single('image'), (req, res) => {
     const { scrapUsername, address } = req.body
     myDb.collectorNotifications.insertMany({ scrapUsername: scrapUsername, address: address }).then((doc) => {
         if (doc)
@@ -176,5 +183,27 @@ app.route('/collectorNotif').post(upload.single('image'),(req, res) => {
     }).catch((err) => {
         res.json({ status: 'error' })
     })
+})
+app.put('/updateCredits', async (req, res) => {
+    const { credits, citizenUsername, collectorUsername } = req.query
+    if (citizenUsername && collectorUsername) {
+        if (typeof credits == 'string') {
+            credits = JSON.parse(credits)
+        }
+        let citizenCredits = 0.25 * credits
+        let collectorCredits = 0.75 * credits
+        try {
+            let doc = await myDb.users.updateOne({ username: citizenUsername }, { $inc: { credits: citizenCredits } })
+            let doc2 = await myDb.users.updateOne({ username: collectorUsername }, { $inc: { credits: collectorCredits } })
+            if (doc && doc2)
+                res.json({ errorCode: 0, status: 'success' })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    else{
+        res.json({status:'make sure you included a credits,citizenUsername,collectorUsername'})
+    }
 })
 app.listen(process.env.PORT)
