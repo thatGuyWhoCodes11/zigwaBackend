@@ -24,7 +24,7 @@ app.route("/register").post(upload.single('image'), async (req, res) => {
             res.json({ status: "data already exists", errorCode: "1" })
         }
         else {
-            await myDb.users.insertMany({ name: name, username: username, password: password, dateOfBirth: dateOfBirth, userType: userType, phoneNumber: phoneNumber }).then((stat => res.json({ status: "success", errorCode: "0" }))).catch((err) => { res.json({ err }) })
+            await myDb.users.insertMany({ name: name, username: username, password: password, dateOfBirth: dateOfBirth, userType: userType, phoneNumber: phoneNumber,credits:'0' }).then((stat => res.json({ status: "success", errorCode: "0" }))).catch((err) => { res.json({ err }) })
         }
     }).catch((err) => { res.json({ err }) })
 }).get((req, res) => {
