@@ -152,12 +152,12 @@ app.route('/notifications').post(upload.single('image'), (req, res) => {
 }).put((req, res) => {
     const { _id, completed } = req.query
     if (completed) {
-        myDb.scrapDealerNotif.updateOne({ _id: _id }, { $set: { completed: 'yes' } }).then((req, res) => {
+        myDb.scrapDealerNotif.updateOne({ _id: _id }, { $set: { completed: 'yes' } }).then(() => {
             res.json({ errorCode: 0 })
         }).catch((err) => { console.log(err); res.json({ error: 'an error happened!' }) })
     }
     else {
-        myDb.scrapDealerNotif.updateOne({ _id: _id }, { $set: { accepted: 'yes' } }).then((req, res) => {
+        myDb.scrapDealerNotif.updateOne({ _id: _id }, { $set: { accepted: 'yes' } }).then(() => {
             res.json({ errorCode: 0 })
         }).catch((err) => { console.log(err); res.json({ error: 'an error happened!' }) })
     }
