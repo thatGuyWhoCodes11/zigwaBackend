@@ -185,7 +185,7 @@ app.route('/collectorNotif').post(upload.single('image'), (req, res) => {
     })
 })
 app.put('/updateCredits', async (req, res) => {
-    const { credits, citizenUsername, collectorUsername } = req.query
+    let { credits, citizenUsername, collectorUsername } = req.query
     if (citizenUsername && collectorUsername) {
         if (typeof credits == 'string') {
             credits = JSON.parse(credits)
