@@ -206,4 +206,8 @@ app.put('/updateCredits', async (req, res) => {
         res.json({status:'make sure you included a credits,citizenUsername,collectorUsername'})
     }
 })
+app.put('updateStatus',(req,res)=>{
+    const {status,_id} =req.query
+    myDb.transactions.updateOne({_id:_id},{$set:{status:status}}).then((res)=>res.json({errorCode:0,status:'success!'})).catch((err)=>{console.log(err);res.json({status:'something went wrong!'})})
+})
 app.listen(process.env.PORT)
