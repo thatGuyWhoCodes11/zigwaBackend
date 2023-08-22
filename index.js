@@ -149,7 +149,7 @@ app.route('/notifications').post(upload.single('image'), (req, res) => {
         else
             res.json({ status: 'empty, :skull:' })
     }).catch((err) => { res.json('something went wrong!'); console.log(err) })
-}).put((req, res => {
+}).put((req, res) => {
     const { _id, completed } = req.query
     if (completed) {
         myDb.scrapDealerNotif.updateOne({ _id: _id }, { $set: { completed: 'yes' } }).then((req, res) => {
@@ -161,7 +161,7 @@ app.route('/notifications').post(upload.single('image'), (req, res) => {
             res.json({ errorCode: 0 })
         }).catch((err) => { console.log(err); res.json({ error: 'an error happened!' }) })
     }
-}))
+})
 app.route('/collectorNotif').post(upload.single('image'), (req, res) => {
     const { scrapUsername, address } = req.body
     myDb.collectorNotifications.insertMany({ scrapUsername: scrapUsername, address: address }).then((doc) => {
