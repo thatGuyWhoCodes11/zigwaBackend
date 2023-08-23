@@ -24,7 +24,7 @@ app.route("/register").post(upload.single('image'), async (req, res) => {
             res.json({ status: "data already exists", errorCode: "1" })
         }
         else {
-            await myDb.users.insertMany({ name: name, username: username, password: password, dateOfBirth: dateOfBirth, userType: userType, phoneNumber: phoneNumber,credits:'0' }).then((stat => res.json({ status: "success", errorCode: "0" }))).catch((err) => { res.json({ err }) })
+            await myDb.users.insertMany({ name: name, username: username, password: password, dateOfBirth: dateOfBirth, userType: userType, phoneNumber: phoneNumber, credits: '0' }).then((stat => res.json({ status: "success", errorCode: "0" }))).catch((err) => { res.json({ err }) })
         }
     }).catch((err) => { res.json({ err }) })
 }).get((req, res) => {
@@ -202,13 +202,21 @@ app.put('/updateCredits', async (req, res) => {
             console.log(e)
         }
     }
-    else{
-        res.json({status:'make sure you included a credits,citizenUsername,collectorUsername'})
+    else {
+        res.json({ status: 'make sure you included a credits,citizenUsername,collectorUsername' })
     }
 })
-app.put('/updateStatus',(req,res)=>{
-    const {status,_id} =req.query
-    console.log(status,_id)
-    myDb.transactions.updateOne({_id:_id},{$set:{status:status}}).then((res)=>res.json({errorCode:0,status:'success!'})).catch((err)=>{console.log(err);res.json({status:'something went wrong!'})})
+app.put('/updateStatus', (req, res) => {
+    const { status, _id } = req.query
+    console.log(status, _id)
+    myDb.transactions.updateOne({ _id: _id }, { $set: { status: status } }).then((res) => res.json({ errorCode: 0, status: 'success!' })).catch((err) => { console.log(err); res.json({ status: 'something went wrong!' }) })
+})
+app.route('/wrapUp').delete((req, res) => {
+    const { image_name } = req.query
+    myDb.images.deleteMany({ image_name: image_name }).then(() => {
+        myDb.scrapDealerNotif.deleteMany({ image_name: image_name }).then(()=>{
+            res.json({errorCode:0,status:'success!'})
+        })
+    })
 })
 app.listen(process.env.PORT)
