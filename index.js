@@ -209,7 +209,7 @@ app.put('/updateCredits', async (req, res) => {
 app.put('/updateStatus', (req, res) => {
     const { status, _id } = req.query
     console.log(status, _id)
-    myDb.transactions.updateOne({ _id: _id }, { $set: { status: status } }).then((res) => res.json({ errorCode: 0, status: 'success!' })).catch((err) => { console.log(err); res.json({ status: 'something went wrong!' }) })
+    myDb.transactions.updateOne({ _id: _id }, { $set: { status: status } }).then(() => res.json({ errorCode: 0, status: 'success!' })).catch((err) => { console.log(err); res.json({ status: 'something went wrong!' }) })
 })
 app.route('/wrapUp').delete((req, res) => {
     const { image_name } = req.query
